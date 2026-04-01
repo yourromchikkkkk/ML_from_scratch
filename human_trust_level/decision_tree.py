@@ -35,8 +35,8 @@ class DecisionTree:
             best_split = self.best_split(dataset, n_features)
 
             if best_split['info_gain'] > 0:
-                left_node = self.build_tree(best_split['left_dataset'], current_depth=1)
-                right_node = self.build_tree(best_split['right_dataset'], current_depth=1)
+                left_node = self.build_tree(best_split['left_dataset'], current_depth = current_depth + 1)
+                right_node = self.build_tree(best_split['right_dataset'], current_depth = current_depth + 1)
 
                 return Node(best_split['feature_idx'], best_split['threshold'], best_split['info_gain'], left_node, right_node)
         
@@ -56,7 +56,7 @@ class DecisionTree:
                 if len(left_dataset) and len(right_dataset):
                     parent_y, left_y, right_y = dataset[:, -1], left_dataset[:, -1], right_dataset[:, -1]
 
-                    info_gain = self.calc_information_gain(parent_y, left_y, right_y)
+                    info_gain = self.calc_information_gain(parent_y, left_y, right_y, self.impurity_method)
 
                     if info_gain > best_split['info_gain']:
                         best_split['info_gain'] = info_gain
