@@ -13,7 +13,7 @@ class Node:
         # Leaf Node
         self.value = value
 
-class DecisionTress:
+class DecisionTree:
     def __init__(self, min_samples_split=2, max_depth=2, impurity_method='entropy'):
         allowed = {"gini", "entropy"}
 
@@ -108,7 +108,9 @@ class DecisionTress:
         return 1 - p_sum
     
     def fit(self, X, y):
-        dataset = np.concatenate([X, y.reshape(-1, 1)], axis=1)
+        X = np.asarray(X)
+        y = np.asarray(y).reshape(-1, 1)
+        dataset = np.concatenate([X, y], axis=1)
         self.root = self.build_tree(dataset)
 
     def predict_class(self, row, node):
@@ -122,7 +124,8 @@ class DecisionTress:
             return self.predict_class(row, node.right)
 
     def predict(self, X):
-        return [self.predict_class for row in X]
+        X = np.asarray(X)
+        return [self.predict_class(row, self.root) for row in X]
     
     def print_tree(self, node=None, depth=0, indent="|   "):
         prefix = indent * depth
